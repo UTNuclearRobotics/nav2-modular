@@ -1,0 +1,15 @@
+repositories:
+  husarion_ugv_autonomy_ros:
+    type: git
+    url: https://github.com/husarion/husarion_ugv_autonomy_ros.git
+    version: humble
+
+  ouster_ros:
+    type: git
+    url: https://github.com/ouster-lidar/ouster-ros.git
+    version: humble-devel
+
+  # depthai-ros:
+  #   type: git
+  #   url: https://github.com/luxonis/depthai-ros.git
+  #   version: humble

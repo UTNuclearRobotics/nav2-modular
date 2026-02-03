@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  nav2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nav2_modular
+    image: nav2-modular:latest
+
+    # ─── Network & IPC ───────────────────────────────────────────────
+    network_mode: host
+    ipc: host
+    pid: host                   # often helps with ROS 2 signal handling
+
+    # ─── Shared memory ───────────────────────────────────────────────
+    shm_size: 2g                # very useful for Nav2 (costmaps, point clouds, large messages)
+
+    # ─── GUI / X11 (only if you use rviz) ────────────────────────────
+    environment:
+      - DISPLAY=${DISPLAY:-:0}
+      - QT_X11_NO_MITSHM=1
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /dev:/dev
+      # Optional – uncomment and create these folders if you need them
+      # - ./maps:/maps:ro
+      # - ./config:/config:ro
+      # - ./logs:/ros2_ws/log
+    command: tail -f /dev/null
+    # The entrypoint.sh script expects arguments to be passed via docker run / compose override

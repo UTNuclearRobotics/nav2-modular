@@ -30,8 +30,12 @@ COPY repos/ /tmp/repos/
 # Choose config via build arg
 COPY repos/${CONFIG}.yaml /tmp/active-repos.yaml
 
-# Clone repositories — recursively follow all nested .repos files
-RUN /tmp/vcs-recursive-import.sh /tmp/active-repos.yaml
+# Clone repositories — recursively follow all nested .repos files and submodules
+RUN echo "Cloning repositories..." \
+ && /tmp/vcs-recursive-import.sh /tmp/active-repos.yaml \
+ && echo "Initializing and updating all git submodules..." \
+ && ( cd src && git submodule update --init --recursive ) \
+    || echo "→ No submodules found or submodule update failed (continuing)"
 
 # Install dependencies
 RUN apt-get update && \ 

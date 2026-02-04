@@ -25,9 +25,14 @@ git clone git@github.com:UTNuclearRobotics/nav2-modular.git
    alias nav2='$HOME/path/to/nav2-modular/scripts/alias'
    ```<br><br>
 
-5. Launch simulation<br>
+5a. Launch simulation<br>
    ```bash
    ros2 launch husarion_ugv_gazebo simulation.launch.py
+   ```<br><br>
+
+5b. Launch hardware<br>
+   ```bash
+   ros2 launch utexas_panther bringup.launch.py
    ```<br><br>
 
 6. Launch navigation + SLAM<br>

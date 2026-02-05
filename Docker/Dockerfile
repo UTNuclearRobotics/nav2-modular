@@ -14,28 +14,35 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-nav2-bringup \
     ros-${ROS_DISTRO}-slam-toolbox \
     ros-${ROS_DISTRO}-gz-ros2-control \
+    openssh-client \
     && rm -rf /var/lib/apt/lists/*
+
+# Force HTTPS for public repos
+RUN git config --global url."https://github.com/".insteadOf "git@github.com:"
 
 # Create workspace
 WORKDIR /ros2_ws
 RUN mkdir -p src
 
-# Copy the recursive import script
+# Copy the recursive import script + configs
 COPY vcs-recursive-import.sh /tmp/
 RUN chmod +x /tmp/vcs-recursive-import.sh
-
-# Copy all possible config files
 COPY repos/ /tmp/repos/
-
-# Choose config via build arg
 COPY repos/${CONFIG}.yaml /tmp/active-repos.yaml
 
-# Clone repositories — recursively follow all nested .repos files and submodules
+# Clone repositories (vcs import usually uses https → no ssh needed here)
 RUN echo "Cloning repositories..." \
- && /tmp/vcs-recursive-import.sh /tmp/active-repos.yaml \
- && echo "Initializing and updating all git submodules..." \
- && ( cd src && git submodule update --init --recursive ) \
-    || echo "→ No submodules found or submodule update failed (continuing)"
+ && /tmp/vcs-recursive-import.sh /tmp/active-repos.yaml
+
+# Update submodules — build fails if any repo fails to update
+RUN echo "Final submodule check..." \
+ && find /ros2_ws/src -name .gitmodules -print0 | while IFS= read -r -d '' gitmodules; do \
+      repo_dir="$(dirname "$gitmodules")"; \
+      (cd "$repo_dir" \
+        && git submodule update --init --recursive --quiet \
+        || { echo "ERROR: submodule update failed in $repo_dir"; exit 1; } \
+      ); \
+    done
 
 # Install dependencies
 RUN apt-get update && \ 

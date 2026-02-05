@@ -85,3 +85,52 @@ import_repos() {
 import_repos "$MAIN_REPOS" 1 "false"
 
 echo "Recursive vcs import finished."
+
+# ─────────────────────────────────────────────────────────────
+# Check for .gitmodules and verify submodules are populated
+# ─────────────────────────────────────────────────────────────
+
+echo ""
+echo "Checking for .gitmodules files and submodule status..."
+
+EXIT_CODE=0
+
+find "$WORKSPACE_ROOT/src" -type f -name .gitmodules -print0 | while IFS= read -r -d '' gitmodules_file; do
+    repo_dir=$(dirname "$gitmodules_file")
+    echo "→ Found .gitmodules in: $repo_dir"
+
+    # Change to the repo directory
+    pushd "$repo_dir" >/dev/null || { echo "  Cannot cd to $repo_dir"; EXIT_CODE=1; continue; }
+
+    # Initialize submodules if not already done
+    git submodule init || { echo "  git submodule init failed"; EXIT_CODE=1; popd >/dev/null; continue; }
+
+    # Update submodules (will clone if missing)
+    if ! git submodule update --init --recursive --quiet; then
+        echo "  ERROR: git submodule update failed in $repo_dir"
+        EXIT_CODE=1
+        popd >/dev/null
+        continue
+    fi
+
+    # Check if any submodule paths are empty or missing
+    while IFS= read -r sub_path; do
+        full_sub_path="$repo_dir/$sub_path"
+        if [ ! -d "$full_sub_path" ] || [ -z "$(ls -A "$full_sub_path" 2>/dev/null | grep -v '^\.git$')" ]; then
+            echo "  ERROR: Submodule directory is empty or missing: $sub_path"
+            EXIT_CODE=1
+        fi
+    done < <(git submodule --quiet foreach 'echo $path' || true)
+
+    popd >/dev/null
+done
+
+if [ $EXIT_CODE -ne 0 ]; then
+    echo ""
+    echo "ERROR: One or more submodules failed to initialize or are empty."
+    echo "Build should fail."
+    exit $EXIT_CODE
+fi
+
+echo "All found submodules appear to be initialized and populated."
+echo "vcs-recursive-import.sh completed successfully."

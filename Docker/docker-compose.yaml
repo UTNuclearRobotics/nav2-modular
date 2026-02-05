@@ -20,12 +20,17 @@ services:
     environment:
       - DISPLAY=${DISPLAY:-:0}
       - QT_X11_NO_MITSHM=1
+    device_cgroup_rules:
+      - 'c 189:* rmw'
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - /dev:/dev
+      - /dev/bus/usb:/dev/bus/usb
       # Optional – uncomment and create these folders if you need them
       # - ./maps:/maps:ro
       # - ./config:/config:ro
       # - ./logs:/ros2_ws/log
+    cap_add:
+      - SYS_RAWIO
     command: tail -f /dev/null
     # The entrypoint.sh script expects arguments to be passed via docker run / compose override

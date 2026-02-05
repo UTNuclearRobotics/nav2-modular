@@ -1,18 +1,16 @@
 repositories:
+  utexas_panther_accessories:
+    type: git
+    url: https://github.com/UTNuclearRobotics/utexas_panther_accessories.git
+    version: humble
   husarion_ugv_autonomy_ros:
     type: git
     url: https://github.com/husarion/husarion_ugv_autonomy_ros.git
     version: humble
-
-  ouster_ros:
-    type: git
-    url: https://github.com/ouster-lidar/ouster-ros.git
-    version: humble-devel
-  
-  utexas_panther_accessories:
-    type: git
-    url: https://github.com/UTNuclearRobotics/utexas_panther_accessories.git
-    version: humble-feature/adding-nav
+  # ouster_ros:
+  #   type: git
+  #   url: https://github.com/ouster-lidar/ouster-ros.git
+  #   version: humble-devel
 
 # nav2_config:
 #   husarion_ugv_autonomy_ros:

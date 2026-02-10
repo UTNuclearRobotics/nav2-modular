@@ -30,18 +30,14 @@ git clone git@github.com:UTNuclearRobotics/nav2-modular.git
    ros2 launch husarion_ugv_gazebo simulation.launch.py
    ```<br><br>
 
-5b. Launch hardware<br>
+5b. Launch sensors<br>
    ```bash
-   ros2 launch utexas_panther bringup.launch.py
+   ros2 launch utexas_panther sensors.launch.py
    ```<br><br>
 
 6. Launch navigation + SLAM<br>
    ```bash
-   ros2 launch husarion_ugv_navigation bringup_launch.py \
-       slam:=true \
-       observation_topic:=/ouster/ouster/points \
-       slam_params_file:=/opt/ros/humble/share/slam_toolbox/config/mapper_params_online_sync.yaml \
-       use_sim_time:=true
+   ros2 launch utexas_panther bringup.launch.py observation_topic:=/ouster/points observation_topic_type:=pointcloud slam:=True
    ```<br><br>
 
 **Important:**<br>

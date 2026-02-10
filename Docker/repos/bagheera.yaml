@@ -7,6 +7,10 @@ repositories:
     type: git
     url: https://github.com/husarion/husarion_ugv_autonomy_ros.git
     version: humble
+  custom_costmap_layers:
+    type: git
+    url: https://github.com/UTNuclearRobotics/custom_costmap_layers.git
+    version: main
   # ouster_ros:
   #   type: git
   #   url: https://github.com/ouster-lidar/ouster-ros.git

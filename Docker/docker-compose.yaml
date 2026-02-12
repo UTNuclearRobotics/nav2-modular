@@ -26,6 +26,8 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - /dev:/dev
       - /dev/bus/usb:/dev/bus/usb
+      # mount host directories to the container for persistent storage
+      # - ${HOME}/workspaces/husarion_base_ws/src:/root/ros2_ws/src
       # Optional – uncomment and create these folders if you need them
       # - ./maps:/maps:ro
       # - ./config:/config:ro

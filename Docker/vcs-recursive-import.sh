@@ -11,8 +11,8 @@ WORKSPACE_ROOT="/ros2_ws"
 MAX_DEPTH=4
 IMPORTED=()
 
-# Get current ROS distro (usually 'humble' in your base image)
-ROS_DISTRO="${ROS_DISTRO:-humble}"   # fallback if not set
+# Get current ROS distro (usually 'jazzy' in your base image)
+ROS_DISTRO="${ROS_DISTRO:-jazzy}"   # fallback if not set
 
 echo "Starting recursive vcs import from: $MAIN_REPOS"
 echo "Using ROS distro: $ROS_DISTRO"

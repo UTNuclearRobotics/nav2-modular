@@ -37,7 +37,7 @@ fi
 usage() {
     cat <<EOF
 
-Nav2 Modular CLI (ROS 2 Humble)
+Nav2 Modular CLI (ROS 2 Jazzy)
 
 Usage: ./scripts/alias <command> [options]
 

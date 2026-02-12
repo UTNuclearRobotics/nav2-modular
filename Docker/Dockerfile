@@ -1,8 +1,8 @@
-FROM osrf/ros:humble-desktop-full-jammy
+FROM osrf/ros:jazzy-desktop-full-noble
 
 ARG CONFIG=bagheera
 ENV DEBIAN_FRONTEND=noninteractive
-ENV ROS_DISTRO=humble
+ENV ROS_DISTRO=jazzy
 
 # Install tools needed for building
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -51,17 +51,18 @@ RUN echo "Final submodule check..." \
 RUN apt-get update && \ 
     rosdep update && \
     rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y -r \
-        --skip-keys "gz-transport12 gz-sim7 gz-math7 gz-msgs9"
+        --skip-keys "gz-transport12 gz-sim7 gz-math7 gz-msgs9 depthai-ros"
 
 # Build workspace
 RUN /bin/bash -c "\
-    source /opt/ros/humble/setup.bash && \
+    source /opt/ros/jazzy/setup.bash && \
     colcon build \
         --symlink-install \
-        --packages-skip husarion_ugv_gazebo \
+        --packages-skip depthai_bridge depthai_filters depthai_ros_driver depthai-ros utexas_panther husarion_ugv_gazebo mecanum_drive_controller depthai_examples husarion_ugv_controller \
         --cmake-args \
             -DCMAKE_BUILD_TYPE=Release \
             -DBUILD_TESTING=OFF \
+        --continue-on-error \
     "
 
 # Clean up to reduce image size

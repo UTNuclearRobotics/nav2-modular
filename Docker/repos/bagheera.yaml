@@ -1,16 +1,20 @@
 repositories:
-  utexas_panther_accessories:
+  #depthai-ros:
+  #  type: git
+  #  url: https://github.com/luxonis/depthai-ros.git
+  #  version: jazzy
+  ouster_ros:
     type: git
-    url: https://github.com/UTNuclearRobotics/utexas_panther_accessories.git
-    version: humble
+    url: https://github.com/ouster-lidar/ouster-ros.git
+    version: jazzy-devel
   husarion_ugv_autonomy_ros:
     type: git
     url: https://github.com/husarion/husarion_ugv_autonomy_ros.git
-    version: humble
-  # ouster_ros:
-  #   type: git
-  #   url: https://github.com/ouster-lidar/ouster-ros.git
-  #   version: humble-devel
+    version: ros2  
+  utexas_panther_accessories:
+    type: git
+    url: https://github.com/UTNuclearRobotics/utexas_panther_accessories.git
+    version: jazzy-feature/initial
 
 # nav2_config:
 #   husarion_ugv_autonomy_ros:
@@ -18,7 +22,3 @@ repositories:
 #   		config: 
 #   			file_name: nav2_params.yaml
 
-  # depthai-ros:
-  #   type: git
-  #   url: https://github.com/luxonis/depthai-ros.git
-  #   version: humble

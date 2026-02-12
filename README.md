@@ -43,3 +43,7 @@ git clone git@github.com:UTNuclearRobotics/nav2-modular.git
 **Important:**<br>
 Make sure to set **Fixed Frame** in RViz to `map`<br>
 Otherwise nav goals will not work.<br><br>
+```
+```shell
+ros2 launch utexas_panther bringup.launch.py namespace:=panther observation_topic_type:=laserscan slam:=True
+```

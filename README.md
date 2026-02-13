@@ -30,6 +30,7 @@ Modular ROS 2 Nav2 Docker environment for UTNRG robots.  Provides a reproducible
    ```
    
 # Running
+## Husarion Panther (Bagherra)
 1. Launch Simulation (Optional)
    ```shell
    nav2 shell

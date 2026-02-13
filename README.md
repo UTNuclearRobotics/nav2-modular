@@ -1,49 +1,53 @@
 # nav2-modular
 Modular ROS 2 Nav2 Docker environment for UTNRG robots.  Provides a reproducible, containerized ROS 2 setup with Nav2, pre-cloned robot-specific repositories, and support for dynamic configuration of platforms (Husarion Panther, Clearpath Warthog) and sensors (Ouster lidar, DepthAI cameras, etc.) via build-time selection.
 
-**Quick Start Instructions**<br><br>
-
-```bash
-git clone git@github.com:UTNuclearRobotics/nav2-modular.git
-```<br><br>
-
-1. Edit config file in `Docker/repos/` directory for platform specific navigation repo and repos for hardware<br><br>
-
-2. Modify Dockerfile ARG CONFIG to the name of your .yaml file<br>
-   Example:<br>
-   ```dockerfile
-   ARG CONFIG=my_robot_config.yaml
-   ```<br><br>
-
-3. Make the alias script executable<br>
-   ```bash
+# Setup & Configuration
+> Note these steps are only required if you are setting up a new robot. If someone has already installed and built this docker image on your robot, then you can skip to the Running section below
+1. Clone repo into your user workspace.
+   ```shell
+   git clone git@github.com:UTNuclearRobotics/nav2-modular.git
+   ```
+2. Edit the `<robot>.yaml` config file located in `/Docker/repos/` directory to specify your robot specific repos for navigation and hardware
+3. Modify the following variable in the `Dockerfile` to match the name of your `<robot>.yaml` config file
+   - `ARG CONFIG=<robot>`
+4. Make the alias script executable
+   ```shell
    chmod +x nav2-modular/scripts/alias
-   ```<br><br>
-
-4. Add the alias (adjust the path to match your system)<br>
-   ```bash
-   alias nav2='$HOME/path/to/nav2-modular/scripts/alias'
-   ```<br><br>
-
-5a. Launch simulation<br>
-   ```bash
+   ```
+5. Create an alias for easy use
+   ```shell
+   echo "alias nav2='<path_to_pkg>/nav2-modular/scripts/alias'" >> ~/.bash_aliases && source ~/.bashrc
+   ```
+# Build and Start
+1. Build the docker image (Optional)
+   > Only required if the image does not already exist.
+   ```shell
+   nav2 build
+   ```
+3. Start the docker image
+   ```shell
+   nav2 start
+   ```
+   
+# Running
+1. Launch Simulation (Optional)
+   ```shell
+   nav2 shell
+   ```
+   ```shell
    ros2 launch husarion_ugv_gazebo simulation.launch.py
-   ```<br><br>
-
-5b. Launch sensors<br>
-   ```bash
+   ```
+3. Launch Sensors
+   ```shell
+   nav2 shell
+   ```
+   ```shell
    ros2 launch utexas_panther sensors.launch.py
-   ```<br><br>
-
-6. Launch navigation + SLAM<br>
-   ```bash
-   ros2 launch utexas_panther bringup.launch.py observation_topic:=/ouster/points observation_topic_type:=pointcloud slam:=True
-   ```<br><br>
-
-**Important:**<br>
-Make sure to set **Fixed Frame** in RViz to `map`<br>
-Otherwise nav goals will not work.<br><br>
-```
-```shell
-ros2 launch utexas_panther bringup.launch.py namespace:=panther observation_topic_type:=laserscan slam:=True
-```
+   ```
+5. Launch navigation package
+   ```shell
+   nav2 shell
+   ```
+   ```shell
+   ros2 launch utexas_panther bringup.launch.py namespace:=panther observation_topic_type:=laserscan slam:=True
+   ```

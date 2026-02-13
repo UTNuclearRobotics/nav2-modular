@@ -10,19 +10,26 @@ Modular ROS 2 Nav2 Docker environment for UTNRG robots.  Provides a reproducible
 2. Edit the `<robot>.yaml` config file located in `/Docker/repos/` directory to specify your robot specific repos for navigation and hardware
 3. Modify the following variable in the `Dockerfile` to match the name of your `<robot>.yaml` config file
    - `ARG CONFIG=<robot>`
-4. Make the alias script executable
+4. Make the nav2 script executable
    ```shell
-   chmod +x nav2-modular/scripts/alias
+   chmod +x nav2-modular/scripts/nav2
    ```
-5. Create an alias for easy use
+5. Install NAV2-Modular CLI
    ```shell
+   cd ~/ros2_ws/nav2-modular<br>
+   sudo usermod -aG docker $USER
+   export PATH="$HOME/.local/bin:$PATH"
+   make install
+
+   (Optional): 
    echo "alias nav2='<path_to_pkg>/nav2-modular/scripts/alias'" >> ~/.bash_aliases && source ~/.bashrc
+
    ```
 # Build and Start
 1. Build the docker image (Optional)
    > Only required if the image does not already exist.
    ```shell
-   nav2 build
+   nav2 build -v
    ```
 3. Start the docker image
    ```shell

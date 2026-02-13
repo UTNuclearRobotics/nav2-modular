@@ -7,26 +7,21 @@ set -e
 
 CONFIG_FILE="$HOME/.local/share/nav2-modular/config"
 CONTAINER_NAME="nav2_modular"
+DOCKER_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"  # parent of scripts/
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-
-DOCKER_DIR="$PROJECT_ROOT/Docker"
-COMPOSE_FILE="$DOCKER_DIR/docker-compose.yaml"
-
-# Create config on first run
+# Create config on first run if missing (so you never see the error again)
 if [[ ! -f "$CONFIG_FILE" ]]; then
     mkdir -p "$(dirname "$CONFIG_FILE")"
-    echo "PROJECT_ROOT=\"$PROJECT_ROOT\"" > "$CONFIG_FILE"
-    echo "DOCKER_DIR=\"$DOCKER_DIR\"" >> "$CONFIG_FILE"
-    echo "Nav2 Modular config created at $CONFIG_FILE"
+    echo "DOCKER_DIR=\"$DOCKER_DIR\"" > "$CONFIG_FILE"
+    echo "NAV2 Modular config created at $CONFIG_FILE"
 fi
 
-source "$CONFIG_FILE" 2>/dev/null || true
+# Source config file
+. "$CONFIG_FILE"
 
-if [[ ! -f "$COMPOSE_FILE" ]]; then
-    echo "Error: docker-compose.yaml not found at $COMPOSE_FILE"
-    echo "Check your folder structure or config file: $CONFIG_FILE"
+if [[ ! -d "$DOCKER_DIR" ]]; then
+    echo "Error: Docker directory '$DOCKER_DIR' not found."
+    echo "Fix your config at $CONFIG_FILE or delete it and re-run."
     exit 1
 fi
 
@@ -70,51 +65,42 @@ EOF
 
 case "$1" in
     start|s)
-        xhost +local:docker >/dev/null 2>&1 && echo "X11 access granted"
-        docker compose -f "$COMPOSE_FILE" up -d
-        ;;
+        xhost +local:docker && echo "Xhost permissions added" && docker compose -f "$DOCKER_DIR/docker-compose.yaml" up -d ;;
 
     stop|x)
-        docker compose -f "$COMPOSE_FILE" down
-        echo "Container stopped and removed."
+        docker compose -f "$DOCKER_DIR/docker-compose.yaml" down
         ;;
 
     shell|sh)
-        if ! docker ps -q -f name="$CONTAINER_NAME" >/dev/null; then
-            echo "Container is not running. Run '$0 start' first."
-            exit 1
-        fi
-        docker exec -it "$CONTAINER_NAME" bash -l
+        docker exec -ti "$CONTAINER_NAME" bash -l
         ;;
 
     build|b)
-        if docker ps -q -f name="$CONTAINER_NAME" >/dev/null; then
-            echo "Container is running → stopping it first..."
-            docker compose -f "$COMPOSE_FILE" down
+        if [ "$(docker ps -q -f name=$CONTAINER_NAME)" ]; then
+            echo "Stopping running container..."
+            docker compose -f "$DOCKER_DIR/docker-compose.yaml" down
         fi
-
         shift
-        if [[ "$1" == "-v" || "$1" == "--verbose" ]]; then
+        if [ "$1" = "-v" ]; then
             echo "Building with verbose output..."
-            docker compose -f "$COMPOSE_FILE" build --progress=plain
+            docker compose -f "$DOCKER_DIR/docker-compose.yaml" build --progress=plain
         else
             echo "Building image..."
-            docker compose -f "$COMPOSE_FILE" build
+            docker compose -f "$DOCKER_DIR/docker-compose.yaml" build
         fi
         ;;
 
     log|l)
-        docker logs -f --tail 100 "$CONTAINER_NAME"
+        docker logs -f "$CONTAINER_NAME"
         ;;
 
     help|--help|"")
         usage
-        exit 0
         ;;
 
     *)
         echo "Unknown command: $1"
-        echo "Run '$0 help' for usage."
+        echo "Run 'nav2 help' for usage."
         exit 1
         ;;
 esac

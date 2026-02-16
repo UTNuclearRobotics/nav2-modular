@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-slam-toolbox \
     ros-${ROS_DISTRO}-gz-ros2-control \
     ros-${ROS_DISTRO}-rmw-cyclonedds-cpp \
+    ros-${ROS_DISTRO}-topic-tools \
     openssh-client \
     && rm -rf /var/lib/apt/lists/*
 

@@ -27,51 +27,51 @@ RUN git config --global url."https://github.com/".insteadOf "git@github.com:"
 WORKDIR /ros2_ws
 RUN mkdir -p src
 
-# Copy the recursive import script + configs
-COPY vcs-recursive-import.sh /tmp/
-RUN chmod +x /tmp/vcs-recursive-import.sh
-COPY repos/ /tmp/repos/
-COPY repos/${CONFIG}.yaml /tmp/active-repos.yaml
+# # Copy the recursive import script + configs
+# COPY vcs-recursive-import.sh /tmp/
+# RUN chmod +x /tmp/vcs-recursive-import.sh
+# COPY repos/ /tmp/repos/
+# COPY repos/${CONFIG}.yaml /tmp/active-repos.yaml
 
-# Clone repositories (vcs import usually uses https → no ssh needed here)
-RUN echo "Cloning repositories..." \
- && /tmp/vcs-recursive-import.sh /tmp/active-repos.yaml
+# # Clone repositories (vcs import usually uses https → no ssh needed here)
+# RUN echo "Cloning repositories..." \
+#  && /tmp/vcs-recursive-import.sh /tmp/active-repos.yaml
 
-# Update submodules — build fails if any repo fails to update
-RUN echo "Final submodule check..." \
- && find /ros2_ws/src -name .gitmodules -print0 | while IFS= read -r -d '' gitmodules; do \
-      repo_dir="$(dirname "$gitmodules")"; \
-      (cd "$repo_dir" \
-        && git submodule update --init --recursive --quiet \
-        || { echo "ERROR: submodule update failed in $repo_dir"; exit 1; } \
-      ); \
-    done
+# # Update submodules — build fails if any repo fails to update
+# RUN echo "Final submodule check..." \
+#  && find /ros2_ws/src -name .gitmodules -print0 | while IFS= read -r -d '' gitmodules; do \
+#       repo_dir="$(dirname "$gitmodules")"; \
+#       (cd "$repo_dir" \
+#         && git submodule update --init --recursive --quiet \
+#         || { echo "ERROR: submodule update failed in $repo_dir"; exit 1; } \
+#       ); \
+#     done
 
-# Install dependencies
-RUN apt-get update && \ 
-    rosdep update && \
-    rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y -r \
-        --skip-keys "gz-transport12 gz-sim7 gz-math7 gz-msgs9 depthai-ros"
+# # Install dependencies
+# RUN apt-get update && \ 
+#     rosdep update && \
+#     rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y -r \
+#         --skip-keys "gz-transport12 gz-sim7 gz-math7 gz-msgs9 depthai-ros"
 
-# Build workspace
-RUN /bin/bash -c "\
-    source /opt/ros/jazzy/setup.bash && \
-    colcon build \
-        --symlink-install \
-        --packages-skip depthai_bridge depthai_filters depthai_ros_driver depthai-ros utexas_panther husarion_ugv_gazebo mecanum_drive_controller depthai_examples husarion_ugv_controller \
-        --cmake-args \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DBUILD_TESTING=OFF \
-        --continue-on-error \
-    "
+# # Build workspace
+# RUN /bin/bash -c "\
+#     source /opt/ros/jazzy/setup.bash && \
+#     colcon build \
+#         --symlink-install \
+#         --packages-skip husarion_ugv_docking husarion_ugv_autonomy husarion_ugv_gazebo mecanum_drive_controller \
+#         --cmake-args \
+#             -DCMAKE_BUILD_TYPE=Release \
+#             -DBUILD_TESTING=OFF \
+#         --continue-on-error \
+#     "
 
-# Clean up to reduce image size
-RUN rm -rf /tmp/active-repos.yaml /tmp/repos /tmp/vcs-recursive-import.sh \
-    && rm -rf build/*/CMakeCache.txt \
-    && find build/ -type d -name CMakeFiles -exec rm -rf {} + 2>/dev/null || true
+# # Clean up to reduce image size
+# RUN rm -rf /tmp/active-repos.yaml /tmp/repos /tmp/vcs-recursive-import.sh \
+#     && rm -rf build/*/CMakeCache.txt \
+#     && find build/ -type d -name CMakeFiles -exec rm -rf {} + 2>/dev/null || true
 
-# Automatically source workspace in interactive shells
-RUN echo "source /ros2_ws/install/setup.bash" >> /etc/bash.bashrc
+# # Automatically source workspace in interactive shells
+# RUN echo "source /ros2_ws/install/setup.bash" >> /etc/bash.bashrc
 
 # Entrypoint — only launch, no cloning/building
 COPY entrypoint.sh /entrypoint.sh

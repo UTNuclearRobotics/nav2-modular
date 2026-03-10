@@ -2,11 +2,11 @@ repositories:
   utexas_panther_accessories:
     type: git
     url: https://github.com/UTNuclearRobotics/utexas_panther_accessories.git
-    version: humble
+    version: jazzy
   husarion_ugv_autonomy_ros:
     type: git
     url: https://github.com/husarion/husarion_ugv_autonomy_ros.git
-    version: humble
+    version: ros2
   custom_costmap_layers:
     type: git
     url: https://github.com/UTNuclearRobotics/custom_costmap_layers.git

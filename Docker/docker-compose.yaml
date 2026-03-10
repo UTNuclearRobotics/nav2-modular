@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: nav2_modular
-    image: nav2-modular:latest
+    image: nav2-modular:jazzy
 
     # ─── Network & IPC ───────────────────────────────────────────────
     network_mode: host
@@ -20,12 +20,16 @@ services:
     environment:
       - DISPLAY=${DISPLAY:-:0}
       - QT_X11_NO_MITSHM=1
+      # - ROS_DOMAIN_ID=1
+      # - CYCLONEDDS_URI=file://${HOME}/cyclone_panther.xml
     device_cgroup_rules:
       - 'c 189:* rmw'
     volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - /dev:/dev
       - /dev/bus/usb:/dev/bus/usb
+      - ${HOME}/.Xauthority:/root/.Xauthority:ro
+      # - ${HOME}/cyclone_panther.xml:${HOME}/cyclone_panther.xml:ro
       # Optional – uncomment and create these folders if you need them
       # - ./maps:/maps:ro
       # - ./config:/config:ro

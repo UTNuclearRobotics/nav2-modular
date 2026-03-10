@@ -1,8 +1,8 @@
-FROM osrf/ros:humble-desktop-full-jammy
+FROM osrf/ros:jazzy-desktop-full
 
 ARG CONFIG=bagheera
 ENV DEBIAN_FRONTEND=noninteractive
-ENV ROS_DISTRO=humble
+ENV ROS_DISTRO=jazzy
 
 # Install tools needed for building
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -17,6 +17,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-gz-ros2-control \
     ros-${ROS_DISTRO}-rmw-cyclonedds-cpp \
     ros-${ROS_DISTRO}-topic-tools \
+    ros-${ROS_DISTRO}-cv-bridge \
+    ros-${ROS_DISTRO}-vision-opencv \
+    ros-${ROS_DISTRO}-twist-stamper \
+    ros-${ROS_DISTRO}-domain-bridge \
     openssh-client \
     && rm -rf /var/lib/apt/lists/*
 
@@ -40,24 +44,24 @@ RUN echo "Cloning repositories..." \
  && /tmp/vcs-recursive-import.sh /tmp/active-repos.yaml
 
 # Update submodules — build fails if any repo fails to update
-RUN echo "Final submodule check..." \
- && find /ros2_ws/src -name .gitmodules -print0 | while IFS= read -r -d '' gitmodules; do \
-      repo_dir="$(dirname "$gitmodules")"; \
-      (cd "$repo_dir" \
-        && git submodule update --init --recursive --quiet \
-        || { echo "ERROR: submodule update failed in $repo_dir"; exit 1; } \
-      ); \
-    done
+RUN /bin/bash -c '\
+    find /ros2_ws/src -name .gitmodules -print0 \
+      | while IFS= read -r -d "" gitmodules; do \
+          repo_dir="$(dirname "$gitmodules")"; \
+          cd "$repo_dir" \
+            && git submodule update --init --recursive --quiet \
+            || { echo "ERROR: submodule update failed in $repo_dir"; exit 1; }; \
+        done'
 
 # Install dependencies
 RUN apt-get update && \ 
     rosdep update && \
     rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y -r \
-        --skip-keys "gz-transport12 gz-sim7 gz-math7 gz-msgs9"
+        --skip-keys "gz-transport13 gz-sim8 gz-math7 gz-msgs10"
 
 # Build workspace
 RUN /bin/bash -c "\
-    source /opt/ros/humble/setup.bash && \
+    source /opt/ros/jazzy/setup.bash && \
     colcon build \
         --symlink-install \
         --packages-skip husarion_ugv_gazebo \

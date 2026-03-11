@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-gz-ros2-control \
     ros-${ROS_DISTRO}-rmw-cyclonedds-cpp \
     ros-${ROS_DISTRO}-topic-tools \
+    ros-${ROS_DISTRO}-twist-stamper \
     openssh-client \
     && rm -rf /var/lib/apt/lists/*
 
@@ -40,14 +41,14 @@ RUN echo "Cloning repositories..." \
  && /tmp/vcs-recursive-import.sh /tmp/active-repos.yaml
 
 # Update submodules — build fails if any repo fails to update
-RUN echo "Final submodule check..." \
- && find /ros2_ws/src -name .gitmodules -print0 | while IFS= read -r -d '' gitmodules; do \
-      repo_dir="$(dirname "$gitmodules")"; \
-      (cd "$repo_dir" \
-        && git submodule update --init --recursive --quiet \
-        || { echo "ERROR: submodule update failed in $repo_dir"; exit 1; } \
-      ); \
-    done
+RUN /bin/bash -c '\
+    find /ros2_ws/src -name .gitmodules -print0 \
+      | while IFS= read -r -d "" gitmodules; do \
+          repo_dir="$(dirname "$gitmodules")"; \
+          cd "$repo_dir" \
+            && git submodule update --init --recursive --quiet \
+            || { echo "ERROR: submodule update failed in $repo_dir"; exit 1; }; \
+        done'
 
 # Install dependencies
 RUN apt-get update && \ 

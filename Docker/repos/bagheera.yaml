@@ -11,6 +11,10 @@ repositories:
     type: git
     url: https://github.com/UTNuclearRobotics/custom_costmap_layers.git
     version: main
+  spatio_temporal_voxel_layer:
+    type: git
+    url: https://github.com/UTNuclearRoboticsPublic/spatio_temporal_voxel_layer.git
+    version: humble
   # ouster_ros:
   #   type: git
   #   url: https://github.com/ouster-lidar/ouster-ros.git

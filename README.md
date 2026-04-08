@@ -59,3 +59,14 @@ Modular ROS 2 Nav2 Docker environment for UTNRG robots.  Provides a reproducible
    ```shell
    ros2 launch utexas_panther bringup.launch.py namespace:=panther observation_topic_type:=laserscan slam:=True
    ```
+
+
+# Instructions for Getting Sim To Work
+
+Mount a package into the container
+
+```
+cd repos
+mkdir ros2_ws/src -p
+git clone -b humble-feature/sim git@github.com:UTNuclearRobotics/utexas_panther_accessories.git
+```

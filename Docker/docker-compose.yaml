@@ -30,6 +30,7 @@ services:
       - ${HOME}/.Xauthority:/root/.Xauthority:ro
       # - ${HOME}/cyclone_panther.xml:${HOME}/cyclone_panther.xml:ro
       # Optional – uncomment and create these folders if you need them
+      - ./repos/ros2_ws/src/utexas_panther_accessories:/ros2_ws/src/utexas_panther_accessories:rw
       # - ./maps:/maps:ro
       # - ./config:/config:ro
       # - ./logs:/ros2_ws/log

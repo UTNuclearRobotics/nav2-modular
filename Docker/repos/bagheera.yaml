@@ -1,8 +1,8 @@
 repositories:
-  utexas_panther_accessories:
-    type: git
-    url: https://github.com/UTNuclearRobotics/utexas_panther_accessories.git
-    version: humble
+  # utexas_panther_accessories:
+  #   type: git
+  #   url: https://github.com/UTNuclearRobotics/utexas_panther_accessories.git
+  #   version: humble-feature/sim
   husarion_ugv_autonomy_ros:
     type: git
     url: https://github.com/husarion/husarion_ugv_autonomy_ros.git

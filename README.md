@@ -71,3 +71,11 @@ mkdir ros2_ws/src -p
 git clone -b humble-feature/tweaking-frame-names git@github.com:UTNuclearRobotics/utexas_panther_accessories.git
 git clone -b humble-feature/adding-ouster https://github.com/husarion/husarion_ugv_ros.git 
 ```
+
+Run the following
+
+```
+ros2 launch husarion_ugv_gazebo simulation.launch.py
+
+ros2 launch utexas_panther bringup.launch.py namespace:=panther observation_topic_type:=pointcloud slam:=True
+```

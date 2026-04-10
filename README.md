@@ -68,5 +68,6 @@ Mount a package into the container
 ```
 cd repos
 mkdir ros2_ws/src -p
-git clone -b humble-feature/sim git@github.com:UTNuclearRobotics/utexas_panther_accessories.git
+git clone -b humble-feature/tweaking-frame-names git@github.com:UTNuclearRobotics/utexas_panther_accessories.git
+git clone -b humble-feature/adding-ouster https://github.com/husarion/husarion_ugv_ros.git 
 ```

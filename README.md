@@ -70,6 +70,8 @@ cd repos
 mkdir ros2_ws/src -p
 git clone -b humble-feature/tweaking-frame-names git@github.com:UTNuclearRobotics/utexas_panther_accessories.git
 git clone -b humble-feature/adding-ouster git@github.com:UTNuclearRobotics/husarion_ugv_ros.git
+git clone -b humble-feature/speedway-world git@github.com:UTNuclearRobotics/warthog_sim.git
+git clone -b humble git@github.com:clearpathrobotics/clearpath_simulator.git
 ```
 
 Run the following

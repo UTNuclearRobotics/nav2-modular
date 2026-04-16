@@ -61,7 +61,7 @@ RUN /bin/bash -c "\
     source /opt/ros/humble/setup.bash && \
     colcon build \
         --symlink-install \
-        --packages-skip husarion_ugv_gazebo \
+        #--packages-skip husarion_ugv_gazebo \
         --cmake-args \
             -DCMAKE_BUILD_TYPE=Release \
             -DBUILD_TESTING=OFF \

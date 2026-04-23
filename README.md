@@ -79,5 +79,5 @@ Run the following
 ```
 ros2 launch husarion_ugv_gazebo simulation.launch.py
 
-ros2 launch utexas_panther bringup.launch.py namespace:=panther observation_topic_type:=pointcloud slam:=True
+ros2 launch utexas_panther bringup.launch.py observation_topic_type:=pointcloud slam:=True
 ```

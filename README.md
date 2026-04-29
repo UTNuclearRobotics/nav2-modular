@@ -56,6 +56,12 @@ Modular ROS 2 Nav2 Docker environment for UTNRG robots.  Provides a reproducible
    ```shell
    nav2 shell
    ```
+   SLAM
    ```shell
-   ros2 launch utexas_panther bringup.launch.py namespace:=panther observation_topic_type:=laserscan slam:=True
+   ros2 launch utexas_panther bringup.launch.py namespace:=panther slam:=True use_composition:=False observation_topic:=/ouster/points
+   ```
+
+   AMCL
+   ```shell
+   ros2 launch utexas_panther bringup.launch.py namespace:=panther slam:=False use_composition:=False observation_topic:=/ouster/points map:=/ros2_ws/maps/map.yaml
    ```

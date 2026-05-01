@@ -7,16 +7,12 @@
       <Interfaces>
         <NetworkInterface name="eth1"/>
         <NetworkInterface name="eth2"/>
-        <NetworkInterface name="wg0" multicast="false"/>
-        <NetworkInterface name="lo" multicast="false"/>
       </Interfaces>
     </General>
     <Discovery>
       <Peers>
         <Peer address="10.15.20.3"/>
-        <Peer address="127.0.0.1"/>
         <Peer address="10.10.10.30"/>
-        <Peer address="10.10.0.9"/>
       </Peers>
     </Discovery>
   </Domain>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CycloneDDS xmlns="https://cdds.io/config"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="https://cdds.io/config https://cdds.io/schema/cyclonedds.xsd">
+  <Domain id="any">
+    <General>
+      <Interfaces>
+        <NetworkInterface name="eth1"/>
+        <NetworkInterface name="eth2"/>
+        <NetworkInterface name="wg0" multicast="false"/>
+        <NetworkInterface name="lo" multicast="false"/>
+      </Interfaces>
+    </General>
+    <Discovery>
+      <Peers>
+        <Peer address="10.15.20.3"/>
+        <Peer address="127.0.0.1"/>
+        <Peer address="10.10.10.30"/>
+        <Peer address="10.10.0.9"/>
+      </Peers>
+    </Discovery>
+  </Domain>
+</CycloneDDS>

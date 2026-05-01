@@ -35,7 +35,12 @@ Modular ROS 2 Nav2 Docker environment for UTNRG robots.  Provides a reproducible
    ```shell
    nav2 start
    ```
-   
+
+# Quality of Life Additions
+- Added cyclone_panther.xml for CycloneDDS middleware implementation to nav2-modular/Docker/config/bagheera/cyclone_panther.xml
+   - This file is mounted in the container and the environment variables RMW_IMPLEMENTATION and CYCLONEDDS_URI have been added to docker-compose.yaml
+- Added maps directory at nav2-modular/Docker/maps. If using AMCL, place maps in this directory and it will be mounted at /ros2_ws/maps
+
 # Running
 ## Husarion Panther (Bagherra)
 1. Launch Simulation (Optional)

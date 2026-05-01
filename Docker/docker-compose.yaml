@@ -20,7 +20,9 @@ services:
     environment:
       - DISPLAY=${DISPLAY:-:0}
       - QT_X11_NO_MITSHM=1
-      # - CYCLONEDDS_URI=file://${HOME}/cyclone_panther.xml
+      - CYCLONEDDS_URI=file:///ros2_ws/cyclone_panther.xml
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      - ROS_DOMAIN_ID=1
     device_cgroup_rules:
       - 'c 189:* rmw'
     volumes:
@@ -28,7 +30,8 @@ services:
       - /dev:/dev
       - /dev/bus/usb:/dev/bus/usb
       - ${HOME}/.Xauthority:/root/.Xauthority:ro
-      # - ${HOME}/cyclone_panther.xml:${HOME}/cyclone_panther.xml:ro
+      - ${HOME}/ros2_ws/nav2-modular/Docker/config/bagheera/cyclone_panther.xml:/ros2_ws/cyclone_panther.xml:ro
+      - ${HOME}/ros2_ws/nav2-modular/Docker/maps:/ros2_ws/maps:ro
       # Optional – uncomment and create these folders if you need them
       # - ./maps:/maps:ro
       # - ./config:/config:ro

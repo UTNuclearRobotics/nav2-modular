@@ -65,7 +65,9 @@ EOF
 
 case "$1" in
     start|s)
-        xhost +local:docker && echo "Xhost permissions added" && docker compose -f "$DOCKER_DIR/docker-compose.yaml" up -d ;;
+        xhost +local:docker && echo "Xhost permissions added" || true
+        docker compose -f "$DOCKER_DIR/docker-compose.yaml" up -d
+        ;;
 
     stop|x)
         docker compose -f "$DOCKER_DIR/docker-compose.yaml" down

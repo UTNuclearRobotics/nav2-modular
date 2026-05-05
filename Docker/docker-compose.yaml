@@ -30,8 +30,8 @@ services:
       - /dev:/dev
       - /dev/bus/usb:/dev/bus/usb
       - ${HOME}/.Xauthority:/root/.Xauthority:ro
-      - ${HOME}/ros2_ws/nav2-modular/Docker/config/bagheera/cyclone_panther.xml:/ros2_ws/cyclone_panther.xml:ro
-      - ${HOME}/ros2_ws/nav2-modular/Docker/maps:/ros2_ws/maps:ro
+      - ./config/bagheera/cyclone_panther.xml:/ros2_ws/cyclone_panther.xml:ro
+      - ./maps:/ros2_ws/maps:ro
       # Optional – uncomment and create these folders if you need them
       # - ./maps:/maps:ro
       # - ./config:/config:ro

@@ -5,8 +5,8 @@
   <Domain id="any">
     <General>
       <Interfaces>
-        <NetworkInterface name="eth1"/>
-        <NetworkInterface name="eth2"/>
+        <NetworkInterface name="enp11s0"/>
+        <NetworkInterface name="enp10s0"/>
       </Interfaces>
     </General>
     <Discovery>
